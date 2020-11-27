@@ -7,22 +7,28 @@ public class waterSynthesis {
 
         Thread[] molecules = new Thread[OXYGEN_MOLECULES + HYDROGEN_MOLECULES];
 
+        System.out.println("Simulació Sintetitzant Aigua");
+
         for (int i = 0; i < OXYGEN_MOLECULES; i++) {
-            molecules[i] = new Thread(new Oxygen());
+            molecules[i] = new Thread(new Oxygen(i + 1));
             molecules[i].start();
         }
 
-        for (int i = OXYGEN_MOLECULES; i < HYDROGEN_MOLECULES; i++) {
+        for (int i = OXYGEN_MOLECULES; i < OXYGEN_MOLECULES + HYDROGEN_MOLECULES; i++) {
             molecules[i] = new Thread(new Hydrogen());
             molecules[i].start();
         }
 
         for (Thread molecule : molecules) {
-            try {
-                molecule.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            join(molecule);
+        }
+    }
+
+    private static void join(Thread thread) {
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
