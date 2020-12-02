@@ -7,18 +7,13 @@ public class Oxygen implements Runnable {
     private static final int CHARACTERS_NUMBER = 4;
     private static final char CHARACTER_OXYGEN_1 = '*';
     private static final char CHARACTER_OXYGEN_2 = '+';
-    private int character;
-    private int id;
+    private final int character;
+    private final int id;
     public static Semaphore waitForHydrogens = new Semaphore(0);
 
     public Oxygen(int id) {
         this.id = id;
-
-        if (id == 1) {
-            character = CHARACTER_OXYGEN_1;
-        } else {
-            character = CHARACTER_OXYGEN_2;
-        }
+        character = (id == 1) ? CHARACTER_OXYGEN_1 : CHARACTER_OXYGEN_2;
     }
 
     @Override
@@ -42,17 +37,21 @@ public class Oxygen implements Runnable {
     }
 
     private void synthesizeWater() {
-        try {
-            Thread.sleep((long) (Math.random() * MAX_TIME_TO_PRODUCE_WATER));
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
+        sleep((long) (Math.random() * MAX_TIME_TO_PRODUCE_WATER));
         System.out.println("-----------> L'Oxigen Ox" + id + " sintetitza aigua");
     }
 
     private void waitForHydrogens() {
         try {
             waitForHydrogens.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sleep(long ms) {
+        try {
+            Thread.sleep(ms);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
