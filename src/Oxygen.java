@@ -12,11 +12,9 @@ public class Oxygen implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Aquest és l'Oxigen 0x" + id);
-        for (int i = 0; i < SYNTHESIS_NUMBER; i++) {
-            waitForHydrogens();
-            synthesizeWater();
-        }
+        System.out.println("Aquest és l'Oxigen Ox" + id);
+        waitForHydrogens();
+        synthesizeWater();
     }
 
     private void synthesizeWater() {
@@ -25,6 +23,7 @@ public class Oxygen implements Runnable {
 
     private void waitForHydrogens() {
         try {
+            System.out.println("Oxygen " + id + " esperant dos hidrogens...");
             waitForHydrogens.acquire();
         } catch (InterruptedException e) {
             e.printStackTrace();

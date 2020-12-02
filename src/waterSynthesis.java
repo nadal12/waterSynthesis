@@ -1,9 +1,9 @@
 public class waterSynthesis {
 
-    private static final int OXYGEN_MOLECULES = 2;
-    private static final int HYDROGEN_MOLECULES = 4;
+    private static final int OXYGEN_MOLECULES = 1;
+    private static final int HYDROGEN_MOLECULES = 2;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         Thread[] molecules = new Thread[OXYGEN_MOLECULES + HYDROGEN_MOLECULES];
 
@@ -13,6 +13,9 @@ public class waterSynthesis {
             molecules[i] = new Thread(new Oxygen(i + 1));
             molecules[i].start();
         }
+
+        //TODO revisar sleep
+        Thread.sleep(2000);
 
         for (int i = OXYGEN_MOLECULES; i < OXYGEN_MOLECULES + HYDROGEN_MOLECULES; i++) {
             molecules[i] = new Thread(new Hydrogen());
