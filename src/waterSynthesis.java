@@ -10,7 +10,7 @@ public class waterSynthesis {
         System.out.println("Simulació Sintetitzant Aigua");
 
         for (int i = 0; i < OXYGEN_MOLECULES; i++) {
-            molecules[i] = new Thread(new Oxygen(i + 1));
+            molecules[i] = new Thread(new Oxygen(i + 1, HYDROGEN_MOLECULES));
             molecules[i].start();
         }
 
