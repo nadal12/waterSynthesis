@@ -1,5 +1,3 @@
-import java.util.concurrent.Semaphore;
-
 public class Hydrogen implements Runnable {
 
     private static final int SYNTHESIS_NUMBER = 4;
@@ -13,28 +11,22 @@ public class Hydrogen implements Runnable {
     @Override
     public void run() {
         System.out.println("    Aquest és l'Hidrogen " + id);
-
-        for (int i = 0; i < SYNTHESIS_NUMBER; i++) {
-            acquire(waterSynthesis.mutex);  //Per protegir la variable hydrogensWaiting.
-            if (hydrogensWaiting < 1) {
-                hydrogensWaiting++;
-                System.out.println("    L'Hidrogen senar " + id + " espera un altre hidrogen");
-            } else {
-                System.out.println("    L'Hidrogen parell " + id + " allibera un oxigen per fer aigua");
-                hydrogensWaiting = 0;
-                waterSynthesis.waitForHydrogens.release(); //Amolla oxigen que estava esperant
-            }
-            waterSynthesis.mutex.release();
-            acquire(waterSynthesis.waitSecondHydrogen);
-            sleep(500);
-        }
-
-        System.out.println("    L'Hidrogen " + id + " acaba");
-    }
-
-    private void acquire(Semaphore semaphore) {
         try {
-            semaphore.acquire();
+            for (int i = 0; i < SYNTHESIS_NUMBER; i++) {
+                waterSynthesis.mutex.acquire();  //Per protegir la variable hydrogensWaiting.
+                if (hydrogensWaiting < 1) {
+                    hydrogensWaiting++;
+                    System.out.println("    L'Hidrogen senar " + id + " espera un altre hidrogen");
+                } else {
+                    System.out.println("    L'Hidrogen parell " + id + " allibera un oxigen per fer aigua");
+                    hydrogensWaiting = 0;
+                    waterSynthesis.waitForHydrogens.release(); //Amolla oxigen que estava esperant
+                }
+                waterSynthesis.mutex.release();
+                waterSynthesis.waitSecondHydrogen.acquire(); //Espera l'arribada del hidrogen.
+                sleep(500);
+            }
+            System.out.println("    L'Hidrogen " + id + " acaba");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

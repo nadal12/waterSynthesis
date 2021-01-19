@@ -1,7 +1,7 @@
 public class Oxygen implements Runnable {
 
     private static final int SYNTHESIS_NUMBER = 4;
-    private static final int MAX_TIME_TO_PRODUCE_WATER = 5000;
+    private static final int MAX_TIME_TO_PRODUCE_WATER = 3500;
     private static final int CHARACTERS_NUMBER = 4;
     private static final char CHARACTER_OXYGEN_1 = '*';
     private static final char CHARACTER_OXYGEN_2 = '+';
