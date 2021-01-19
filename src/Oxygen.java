@@ -1,5 +1,3 @@
-import java.util.concurrent.Semaphore;
-
 public class Oxygen implements Runnable {
 
     private static final int SYNTHESIS_NUMBER = 4;
@@ -10,7 +8,6 @@ public class Oxygen implements Runnable {
     private final int character;
     private final int id;
     private final int hydrogenMolecules;
-    public static Semaphore waitForHydrogens = new Semaphore(0);
 
     public Oxygen(int id, int hydrogenMolecules) {
         this.id = id;
@@ -32,8 +29,8 @@ public class Oxygen implements Runnable {
     }
 
     private void releaseHydrogens() {
-        for (int i = 0; i < hydrogenMolecules; i++) {
-            Hydrogen.waitSecondHydrogen.release();
+        for (int i = 0; i < 2; i++) {
+            waterSynthesis.waitSecondHydrogen.release();
         }
     }
 
@@ -52,7 +49,7 @@ public class Oxygen implements Runnable {
 
     private void waitForHydrogens() {
         try {
-            waitForHydrogens.acquire();
+            waterSynthesis.waitForHydrogens.acquire();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

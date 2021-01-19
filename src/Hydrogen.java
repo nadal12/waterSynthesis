@@ -5,8 +5,6 @@ public class Hydrogen implements Runnable {
     private static final int SYNTHESIS_NUMBER = 4;
     private static int hydrogensWaiting = 0;
     private final int id;
-    public static Semaphore waitSecondHydrogen = new Semaphore(0);
-    private static final Semaphore mutex = new Semaphore(1);
 
     public Hydrogen(int id) {
         this.id = id;
@@ -17,17 +15,18 @@ public class Hydrogen implements Runnable {
         System.out.println("    Aquest és l'Hidrogen " + id);
 
         for (int i = 0; i < SYNTHESIS_NUMBER; i++) {
-            acquire(mutex);
+            acquire(waterSynthesis.mutex);  //Per protegir la variable hydrogensWaiting.
             if (hydrogensWaiting < 1) {
                 hydrogensWaiting++;
                 System.out.println("    L'Hidrogen senar " + id + " espera un altre hidrogen");
             } else {
                 System.out.println("    L'Hidrogen parell " + id + " allibera un oxigen per fer aigua");
                 hydrogensWaiting = 0;
-                Oxygen.waitForHydrogens.release();
+                waterSynthesis.waitForHydrogens.release(); //Amolla oxigen que estava esperant
             }
-            mutex.release();
-            acquire(waitSecondHydrogen);
+            waterSynthesis.mutex.release();
+            acquire(waterSynthesis.waitSecondHydrogen);
+            sleep(500);
         }
 
         System.out.println("    L'Hidrogen " + id + " acaba");
@@ -36,6 +35,14 @@ public class Hydrogen implements Runnable {
     private void acquire(Semaphore semaphore) {
         try {
             semaphore.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sleep(long ms) {
+        try {
+            Thread.sleep(ms);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

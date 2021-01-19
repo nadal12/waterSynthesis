@@ -1,7 +1,13 @@
+import java.util.concurrent.Semaphore;
+
 public class waterSynthesis {
 
     private static final int OXYGEN_MOLECULES = 2;
     private static final int HYDROGEN_MOLECULES = 4;
+
+    public static Semaphore waitForHydrogens = new Semaphore(0);
+    public static Semaphore waitSecondHydrogen = new Semaphore(0);
+    public static final Semaphore mutex = new Semaphore(1);
 
     public static void main(String[] args) {
 
