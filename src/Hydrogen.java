@@ -1,3 +1,8 @@
+/*
+Nom i llintages: Nadal Llabrés Belmar
+Enllaç al vídeo:
+ */
+
 public class Hydrogen implements Runnable {
 
     private static final int SYNTHESIS_NUMBER = 4;

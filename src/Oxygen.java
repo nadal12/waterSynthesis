@@ -1,17 +1,20 @@
+/*
+Nom i llintages: Nadal Llabrés Belmar
+Enllaç al vídeo:
+ */
+
 public class Oxygen implements Runnable {
 
     private static final int SYNTHESIS_NUMBER = 4;
-    private static final int MAX_TIME_TO_PRODUCE_WATER = 3500;
-    private static final int CHARACTERS_NUMBER = 4;
+    private static final int MAX_TIME_TO_PRODUCE_WATER = 3500; //Temps màxim que es tardarà a produïr aigua.
+    private static final int CHARACTERS_NUMBER = 4; //Nombre de caràcters que s'imprimeixen quan es sintetitz aigua.
     private static final char CHARACTER_OXYGEN_1 = '*';
     private static final char CHARACTER_OXYGEN_2 = '+';
     private final int character;
     private final int id;
-    private final int hydrogenMolecules;
 
-    public Oxygen(int id, int hydrogenMolecules) {
+    public Oxygen(int id) {
         this.id = id;
-        this.hydrogenMolecules = hydrogenMolecules;
         character = (id == 1) ? CHARACTER_OXYGEN_1 : CHARACTER_OXYGEN_2;
     }
 
@@ -19,6 +22,7 @@ public class Oxygen implements Runnable {
     public void run() {
         System.out.println("Aquest és l'Oxigen Ox" + id);
 
+        // Bucle de síntesis.
         for (int i = 0; i < SYNTHESIS_NUMBER; i++) {
             waitForHydrogens();
             synthesizeWater();
@@ -28,6 +32,9 @@ public class Oxygen implements Runnable {
         System.out.println("L'Oxigen 0x" + id + " acaba");
     }
 
+    /**
+     * Allibera els hidrogens que s'han utilitzat per a fer la síntesis.
+     */
     private void releaseHydrogens() {
         for (int i = 0; i < 2; i++) {
             waterSynthesis.waitSecondHydrogen.release();
