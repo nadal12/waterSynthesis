@@ -41,27 +41,41 @@ public class Oxygen implements Runnable {
         }
     }
 
+    /**
+     * Mètode per imprimir caràcters corresponents a la sintetització d'aigua de cada molècula.
+     */
     private void printCharacters() {
         for (int i = 0; i < CHARACTERS_NUMBER; i++) {
             System.out.print(Character.toString(character) + " ");
+            sleep(2000);
         }
         System.out.println();
     }
 
+    /**
+     * Mètode que sintetitza aigua. Crida a la funció d'imprimir caràcters.
+     */
     private void synthesizeWater() {
         sleep((long) (Math.random() * MAX_TIME_TO_PRODUCE_WATER));
         System.out.println("-----------> L'Oxigen Ox" + id + " sintetitza aigua");
         printCharacters();
     }
 
+    /**
+     * Mètode per esperar a que els hidrogens necessaris arribin.
+     */
     private void waitForHydrogens() {
         try {
-            waterSynthesis.waitForHydrogens.acquire();
+            waterSynthesis.waitForHydrogens.acquire(); //Espera a que arribin dos hidrogens.
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Mètode que fa una espera al fil que el crida.
+     * @param ms Temps d'espera amb ms.
+     */
     private void sleep(long ms) {
         try {
             Thread.sleep(ms);

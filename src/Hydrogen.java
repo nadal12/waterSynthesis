@@ -5,9 +5,9 @@ Enllaç al vídeo:
 
 public class Hydrogen implements Runnable {
 
-    private static final int SYNTHESIS_NUMBER = 4;
-    private static int hydrogensWaiting = 0;
-    private final int id;
+    private static final int SYNTHESIS_NUMBER = 4; //Nombre de síntesis que farà cada molècula.
+    private static int hydrogensWaiting = 0; //Variable per saber quin hidrogen es parell i quin senar.
+    private final int id; //Identificador de l'hidrogen.
 
     public Hydrogen(int id) {
         this.id = id;
@@ -19,16 +19,20 @@ public class Hydrogen implements Runnable {
         try {
             for (int i = 0; i < SYNTHESIS_NUMBER; i++) {
                 waterSynthesis.mutex.acquire();  //Per protegir la variable hydrogensWaiting.
-                if (hydrogensWaiting < 1) {
-                    hydrogensWaiting++;
+                hydrogensWaiting++;
+                if (hydrogensWaiting % 2 == 1) { //Hidrogen senar
+                    waterSynthesis.mutex.release();
                     System.out.println("    L'Hidrogen senar " + id + " espera un altre hidrogen");
+                    waterSynthesis.waitSecondHydrogen.acquire(); //Espera a que arribi el segon hidrogen.
                 } else {
+                    waterSynthesis.mutex.release(); //SIMULACÍO 1 -> INTERCALAT
                     System.out.println("    L'Hidrogen parell " + id + " allibera un oxigen per fer aigua");
-                    hydrogensWaiting = 0;
-                    waterSynthesis.waitForHydrogens.release(); //Amolla oxigen que estava esperant
+                    waterSynthesis.waitForHydrogens.release(); //Amolla l'oxigen que estava esperant
+                    waterSynthesis.waitSecondHydrogen.acquire(); // S'atura fins que l'oxigen acabi de fer l'aigua.
+                    //waterSynthesis.mutex.release(); //SIMULACÍO 2 -> SENSE INTERCALAT
                 }
-                waterSynthesis.mutex.release();
-                waterSynthesis.waitSecondHydrogen.acquire(); //Espera l'arribada del hidrogen.
+
+                // Espera perque estiguin preparats per fer una altre síntesi.
                 sleep(500);
             }
             System.out.println("    L'Hidrogen " + id + " acaba");
@@ -37,6 +41,10 @@ public class Hydrogen implements Runnable {
         }
     }
 
+    /**
+     * Mètode que fa una espera al fil que el crida.
+     * @param ms Temps d'espera amb ms.
+     */
     private void sleep(long ms) {
         try {
             Thread.sleep(ms);
