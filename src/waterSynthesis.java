@@ -1,3 +1,8 @@
+/*
+Nom i llintages: Nadal Llabrés Belmar
+Enllaç al vídeo:
+ */
+
 import java.util.concurrent.Semaphore;
 
 public class waterSynthesis {
