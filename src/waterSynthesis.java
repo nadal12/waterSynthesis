@@ -1,6 +1,6 @@
 /*
 Nom i llintages: Nadal Llabrés Belmar
-Enllaç al vídeo:
+Enllaç al vídeo: https://youtu.be/skMSEgQluX4
  */
 
 import java.util.concurrent.Semaphore;
